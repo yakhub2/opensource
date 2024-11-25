@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .events-section {
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .event-card {
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .event-card:hover {
+      transform: scale(1.02);
+    }
+
+    .event-card.ongoing {
+      border-left: 5px solid #28a745; /* Green border for ongoing events */
+    }
+
+    .event-card.upcoming {
+      border-left: 5px solid #007bff; /* Blue border for upcoming events */
+    }
+
+    .event-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .event-time {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    .event-description {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="events-section">
+    <h2 class="mb-4 text-center">Events</h2>
+
+    <h4>Ongoing Events</h4>
+    <div id="ongoingEvents" class="mb-4">
+      <!-- Ongoing events will be dynamically added here -->
+    </div>
+
+    <h4>Upcoming Events</h4>
+    <div id="upcomingEvents">
+      <!-- Upcoming events will be dynamically added here -->
+    </div>
+  </div>
+
+  <script>
+    // Mock events data
+    const events = [
+      {
+        id: 1,
+        title: "Hackathon 2024",
+        description: "A 24-hour coding challenge for students.",
+        startTime: "2024-11-23T10:00:00",
+        endTime: "2024-11-24T10:00:00",
+      },
+      {
+        id: 2,
+        title: "Cultural Fest",
+        description: "An annual celebration of art, music, and culture.",
+        startTime: "2024-11-30T18:00:00",
+        endTime: "2024-12-02T22:00:00",
+      },
+      {
+        id: 3,
+        title: "Webinar on AI",
+        description: "An insightful webinar on the latest AI trends.",
+        startTime: "2024-11-24T16:00:00",
+        endTime: "2024-11-24T17:30:00",
+      },
+      {
+        id: 4,
+        title: "Sports Meet 2024",
+        description: "A week-long event featuring various sports competitions.",
+        startTime: "2024-11-25T09:00:00",
+        endTime: "2024-12-01T17:00:00",
+      },
+    ];
+
+    // Helper function to format date and time
+    function formatDateTime(dateTime) {
+      const date = new Date(dateTime);
+      return date.toLocaleString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+    }
+
+    // Helper function to check if an event is ongoing
+    function isOngoing(event) {
+      const now = new Date();
+      const start = new Date(event.startTime);
+      const end = new Date(event.endTime);
+      return now >= start && now <= end;
+    }
+
+    // Render events
+    function renderEvents() {
+      const ongoingEventsContainer = document.getElementById("ongoingEvents");
+      const upcomingEventsContainer = document.getElementById("upcomingEvents");
+
+      events.forEach((event) => {
+        const card = document.createElement("div");
+        card.className = `event-card ${isOngoing(event) ? "ongoing" : "upcoming"}`;
+
+        card.innerHTML = `
+          <div class="event-title">${event.title}</div>
+          <div class="event-time">${formatDateTime(event.startTime)} - ${formatDateTime(event.endTime)}</div>
+          <div class="event-description">${event.description}</div>
+        `;
+
+        if (isOngoing(event)) {
+          ongoingEventsContainer.appendChild(card);
+        } else {
+          upcomingEventsContainer.appendChild(card);
+        }
+      });
+    }
+
+    renderEvents();
+  </script>
+
+</body>
+</html>

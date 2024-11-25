@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Spaces and Labs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .space-card {
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      margin-bottom: 15px;
+    }
+
+    .space-card h5 {
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .space-details {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    .space-card .map-link {
+      margin-top: 10px;
+      display: inline-block;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .space-card .map-link:hover {
+      text-decoration: underline;
+    }
+
+    .section-title {
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #343a40;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="text-center mb-4">Study Spaces and Labs</h2>
+
+    <h4 class="section-title">Study Spaces</h4>
+    <div id="studySpaces">
+      <!-- Study spaces will be dynamically inserted here -->
+    </div>
+
+    <h4 class="section-title">Labs</h4>
+    <div id="labs">
+      <!-- Labs will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <script>
+    // Mock data for study spaces and labs
+    const studySpaces = [
+      {
+        id: 1,
+        name: "Central Library",
+        description: "A quiet and spacious environment with individual and group seating.",
+        location: "Building A, First Floor",
+        mapLink: "https://maps.google.com/?q=Central+Library"
+      },
+      {
+        id: 2,
+        name: "Reading Hall",
+        description: "Open 24/7 for students, with Wi-Fi and comfortable seating.",
+        location: "Building B, Second Floor",
+        mapLink: "https://maps.google.com/?q=Reading+Hall"
+      }
+    ];
+
+    const labs = [
+      {
+        id: 1,
+        name: "Physics Lab",
+        description: "Fully equipped lab for conducting physics experiments.",
+        location: "Building C, Ground Floor",
+        mapLink: "https://maps.google.com/?q=Physics+Lab"
+      },
+      {
+        id: 2,
+        name: "Computer Lab",
+        description: "High-performance systems for programming and projects.",
+        location: "Building D, Third Floor",
+        mapLink: "https://maps.google.com/?q=Computer+Lab"
+      }
+    ];
+
+    // Render study spaces
+    const renderStudySpaces = () => {
+      const container = document.getElementById("studySpaces");
+      studySpaces.forEach((space) => {
+        const card = document.createElement("div");
+        card.className = "space-card";
+
+        card.innerHTML = `
+          <h5>${space.name}</h5>
+          <p class="space-details">${space.description}</p>
+          <p class="space-details">Location: ${space.location}</p>
+          <a href="${space.mapLink}" class="map-link" target="_blank">View on Map</a>
+        `;
+        container.appendChild(card);
+      });
+    };
+
+    // Render labs
+    const renderLabs = () => {
+      const container = document.getElementById("labs");
+      labs.forEach((lab) => {
+        const card = document.createElement("div");
+        card.className = "space-card";
+
+        card.innerHTML = `
+          <h5>${lab.name}</h5>
+          <p class="space-details">${lab.description}</p>
+          <p class="space-details">Location: ${lab.location}</p>
+          <a href="${lab.mapLink}" class="map-link" target="_blank">View on Map</a>
+        `;
+        container.appendChild(card);
+      });
+    };
+
+    // Initialize the page by rendering study spaces and labs
+    renderStudySpaces();
+    renderLabs();
+  </script>
+
+</body>
+</html>

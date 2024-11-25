@@ -3,63 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commuter Student Hub</title>
+    <title>Modern Commuter Hub</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+
+        body {
+            background: var(--light);
+            min-height: 100vh;
         }
 
         .header {
             background: white;
+            padding: 1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1.5rem;
         }
 
         .header h1 {
             max-width: 1200px;
             margin: 0 auto;
-            color: #1f2937;
-            font-size: 2rem;
+            color: var(--dark);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            color: var(--primary);
         }
 
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
         .tabs {
             display: flex;
             gap: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
         }
 
         .tab-button {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 0.5rem;
             cursor: pointer;
             font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--dark);
         }
 
         .tab-button.active {
-            background: #2563eb;
+            background: var(--primary);
             color: white;
         }
 
-        .tab-button:not(.active) {
-            background: white;
-            color: #4b5563;
+        .tab-button:hover:not(.active) {
+            background: rgba(79, 70, 229, 0.1);
         }
 
-        .resources-grid {
-            display: grid;
+        .tab-content {
+            display: none;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: grid;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card {
@@ -67,214 +114,294 @@
             border-radius: 0.5rem;
             padding: 1.5rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .card-header {
-            margin-bottom: 1rem;
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .card-title {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .card-icon {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            border-radius: 0.5rem;
+            font-size: 1rem;
         }
 
         .card-description {
             color: #6b7280;
-            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
         }
 
-        .card-icon {
-            width: 1.5rem;
-            height: 1.5rem;
-            color: #4b5563;
-        }
-
-        .urgent-badge {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-        }
-
-        .learn-more-btn {
+        .button {
             width: 100%;
-            padding: 0.5rem;
-            background: #f3f4f6;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
             border: none;
             border-radius: 0.5rem;
-            color: #1f2937;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 0.875rem;
             transition: background-color 0.2s;
         }
 
-        .learn-more-btn:hover {
-            background: #e5e7eb;
+        .button:hover {
+            background: var(--primary-dark);
         }
 
-        body {
-            background: #f9fafb;
-            min-height: 100vh;
+        .notification {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            padding: 1rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideIn 0.3s ease-out;
         }
 
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
-        .event-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .event-details h4 {
-            font-weight: 600;
-        }
-
-        .event-details p {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .event-time {
-            color: #2563eb;
-            font-size: 0.875rem;
+        @media (max-width: 768px) {
+            .tab-button {
+                flex: 1 1 calc(50% - 0.5rem);
+            }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <h1>Commuter Student Hub</h1>
+        <h1>
+            <i class="fas fa-graduation-cap logo-icon"></i>
+            Commuter Hub
+        </h1>
     </header>
 
     <main class="container">
-        <!-- Navigation Tabs -->
         <div class="tabs">
-            <button class="tab-button active">Resources</button>
-            <button class="tab-button">Community</button>
-            <button class="tab-button">Facilities</button>
-            <button class="tab-button">Support</button>
+            <button class="tab-button active" data-tab="resources">
+                <i class="fas fa-book"></i> Resources
+            </button>
+            <button class="tab-button" data-tab="community">
+                <i class="fas fa-users"></i> Community
+            </button>
+            <button class="tab-button" data-tab="facilities">
+                <i class="fas fa-building"></i> Facilities
+            </button>
+            <button class="tab-button" data-tab="support">
+                <i class="fas fa-hands-helping"></i> Support
+            </button>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <!-- Schedule Card -->
+        <div id="resources" class="tab-content active">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-clock card-icon"></i>
-                        Quick Schedule
-                    </div>
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-book"></i>
+                    </span>
+                    Study Materials
                 </div>
-                <div class="event-item">
-                    <div class="event-details">
-                        <h4>Commuter Breakfast</h4>
-                        <p>Student Center</p>
-                    </div>
-                    <span class="event-time">Tomorrow, 8:00 AM</span>
-                </div>
-                <div class="event-item">
-                    <div class="event-details">
-                        <h4>Study Group</h4>
-                        <p>Library Room 204</p>
-                    </div>
-                    <span class="event-time">Wednesday, 2:00 PM</span>
-                </div>
+                <p class="card-description">Access digital textbooks, lecture notes, and course materials for all your classes.</p>
+                <a href="Study Materials.html"><button class="button">Browse Materials</button></a>
             </div>
 
-            <!-- Study Groups Card -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-users card-icon"></i>
-                        Study Groups
-                    </div>
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-laptop"></i>
+                    </span>
+                    Online Resources
                 </div>
-                <button class="learn-more-btn">Find a Study Group</button>
+                <p class="card-description">Access virtual learning tools, research databases, and academic journals.</p>
+                <a href="Online Resources.html"> <button class="button">Access Resources</button></a>
             </div>
 
-            <!-- Notifications Card -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-bell card-icon"></i>
-                        Notifications
-                    </div>
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-calendar"></i>
+                    </span>
+                    Academic Calendar
                 </div>
-                <p class="card-description">No new notifications</p>
+                <p class="card-description">View important dates, deadlines, and academic schedules for the semester.</p>
+               <a href="Academic Calendar.html"><button class="button">View Calendar</button></a>
             </div>
         </div>
 
-        <!-- Resources Grid -->
-        <div class="resources-grid">
-            <!-- Campus Parking Card -->
+        <div id="community" class="tab-content">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-map card-icon"></i>
-                        Campus Parking
-                        <span class="urgent-badge">Urgent</span>
-                    </div>
-                    <p class="card-description">Find available parking spots and permit information</p>
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </span>
+                    Study Groups
                 </div>
-                <button class="learn-more-btn">Learn More</button>
+                <p class="card-description">Join or create study groups for your courses. Connect with fellow students.</p>
+                <a href="study.html"><button class="button">Find Groups</button></a>
             </div>
 
-            <!-- Study Spaces Card -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-book card-icon"></i>
-                        Study Spaces
-                    </div>
-                    <p class="card-description">Locate quiet areas and reservable rooms</p>
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </span>
+                    Discussion Forums
                 </div>
-                <button class="learn-more-btn">Learn More</button>
+                <p class="card-description">Participate in academic discussions and get help from peers.</p>
+                <a href="Discussion Forums.html"><button class="button">Join Discussions</button></a>
             </div>
 
-            <!-- Wellness Center Card -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-heart card-icon"></i>
-                        Wellness Center
-                    </div>
-                    <p class="card-description">Access health and counseling services</p>
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    Events
                 </div>
-                <button class="learn-more-btn">Learn More</button>
+                <p class="card-description">Discover and join campus events, workshops, and social activities.</p>
+               <a href="events.html"><button class="button">View Events</button></a>
+            </div>
+        </div>
+
+        <div id="facilities" class="tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </span>
+                    Study Spaces
+                </div>
+                <p class="card-description">Find and book quiet study areas, group rooms, and computer labs.</p>
+                <a href="studyspace.html"><button class="button">Find Spaces</button></a>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-parking"></i>
+                    </span>
+                    Parking
+                </div>
+                <p class="card-description">View parking availability and manage your parking permits.</p>
+                <a href="parking.html"><button class="button">Check Parking</button></a>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-utensils"></i>
+                    </span>
+                    Dining
+                </div>
+                <p class="card-description">Explore campus dining options, menus, and opening hours.</p>
+                <button class="button" onclick="showNotification('Loading dining options...')">View Dining</button>
+            </div>
+        </div>
+
+        <div id="support" class="tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </span>
+                    Help Desk
+                </div>
+                <p class="card-description">Get technical support and assistance with campus services.</p>
+                <button class="button" onclick="showNotification('Connecting to help desk...')">Contact Support</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-heart"></i>
+                    </span>
+                    Wellness Services
+                </div>
+                <p class="card-description">Access health services, counseling, and wellness resources.</p>
+                <button class="button" onclick="showNotification('Booking appointment...')">Book Appointment</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </span>
+                    Academic Support
+                </div>
+                <p class="card-description">Get help with tutoring, writing, and academic skills.</p>
+                <button class="button" onclick="showNotification('Loading academic support...')">Get Help</button>
             </div>
         </div>
     </main>
 
+    <div class="notification" id="notification"></div>
+
     <script>
-        // Simple tab switching functionality
+        // Tab switching
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                document.querySelectorAll('.tab-button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
+                // Remove active class from all buttons and contents
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
                 // Add active class to clicked button
                 button.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
             });
         });
 
-        // Add hover effect to buttons
-        document.querySelectorAll('.learn-more-btn').forEach(button => {
-            button.addEventListener('mouseover', () => {
-                button.style.backgroundColor = '#e5e7eb';
+        // Notification system
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Card hover effect
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px)';
+                card.style.boxShadow = '0 6px 12px rgba(0,0,0,0.1)';
             });
-            button.addEventListener('mouseout', () => {
-                button.style.backgroundColor = '#f3f4f6';
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
             });
         });
     </script>

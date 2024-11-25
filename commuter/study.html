@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Groups Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* All existing styles remain the same */
+    :root {
+      --primary-bg: #1a1a1a;
+      --secondary-bg: #262626;
+      --message-sent: #0095f6;
+      --message-received: #262626;
+      --border-color: #363636;
+      --text-primary: #ffffff;
+      --text-secondary: #a8a8a8;
+      --input-bg: #262626;
+    }
+    :root {
+      --primary-bg: #1a1a1a;
+      --secondary-bg: #262626;
+      --message-sent: #0095f6;
+      --message-received: #262626;
+      --border-color: #363636;
+      --text-primary: #ffffff;
+      --text-secondary: #a8a8a8;
+      --input-bg: #262626;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      background-color: var(--primary-bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+    }
+
+    .card {
+      background-color: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: none;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      background-color: var(--secondary-bg);
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-weight: 600;
+      padding: 16px;
+    }
+
+    .chat-messages {
+      height: 500px;
+      overflow-y: auto;
+      padding: 20px;
+      background-color: var(--primary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 16px;
+      max-width: 85%;
+      position: relative;
+      word-wrap: break-word;
+    }
+
+    .message.sent {
+      margin-left: auto;
+      flex-direction: row-reverse;
+    }
+
+    .message-content {
+      padding: 12px 16px;
+      border-radius: 22px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.sent .message-content {
+      background-color: var(--message-sent);
+      color: white;
+      margin-left: 8px;
+    }
+
+    .message.received .message-content {
+      background-color: var(--message-received);
+      color: var(--text-primary);
+      margin-right: 8px;
+    }
+
+    .message.system {
+      justify-content: center;
+      max-width: 100%;
+      margin: 24px 0;
+    }
+
+    .message.system .message-content {
+      background-color: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      padding: 4px 12px;
+    }
+
+    .input-group {
+      background-color: var(--secondary-bg);
+      border-top: 1px solid var(--border-color);
+      padding: 16px;
+    }
+
+    .form-control {
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      color: var(--text-primary);
+      padding: 12px 20px;
+      font-size: 14px;
+    }
+
+    .form-control:focus {
+      background-color: var(--input-bg);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+      box-shadow: none;
+    }
+
+    .form-control::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .btn-send {
+      background-color: transparent;
+      border: none;
+      color: var(--message-sent);
+      font-weight: 600;
+      padding: 0 16px;
+    }
+
+    .btn-send:disabled {
+      color: var(--text-secondary);
+    }
+
+    .active-users {
+      background-color: var(--secondary-bg);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .active-users strong {
+      color: var(--text-primary);
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    #usersList {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .login-section .card {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      color: var(--text-primary);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--message-sent);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 8px 16px;
+    }
+
+    .btn-danger {
+      background-color: #ed4956;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--message-sent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .message.received .avatar {
+      background-color: #262626;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--primary-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+    /* Keep all your existing CSS styles */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Section -->
+    <div id="loginSection" class="login-section">
+      <!-- Create Group Card -->
+      <div class="card">
+        <div class="card-header">Create a Group</div>
+        <div class="card-body">
+          <form id="createGroupForm">
+            <div class="mb-3">
+              <label for="groupName" class="form-label">Group Name</label>
+              <input type="text" class="form-control" id="groupName" required>
+            </div>
+            <div class="mb-3">
+              <label for="groupPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="groupPassword" required>
+            </div>
+            <div class="mb-3">
+              <label for="createUsername" class="form-label">Your Username</label>
+              <input type="text" class="form-control" id="createUsername" required>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="isAdmin">
+              <label class="form-check-label" for="isAdmin">Create as Admin</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Create Group</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Join Group Card -->
+      <div class="card">
+        <div class="card-header">Join a Group</div>
+        <div class="card-body">
+          <form id="joinGroupForm">
+            <div class="mb-3">
+              <label for="joinGroupName" class="form-label">Group Name</label>
+              <input type="text" class="form-control" id="joinGroupName" required>
+            </div>
+            <div class="mb-3">
+              <label for="joinGroupPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="joinGroupPassword" required>
+            </div>
+            <div class="mb-3">
+              <label for="joinUsername" class="form-label">Your Username</label>
+              <input type="text" class="form-control" id="joinUsername" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Join Group</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Section -->
+    <div id="chatSection" class="card" style="display: none;">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div id="activeGroup" class="fw-bold"></div>
+        <button class="btn btn-danger btn-sm" id="leaveGroup">Leave Group</button>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="input-group">
+        <input type="text" class="form-control" id="messageInput" placeholder="Message..." required>
+        <button class="btn btn-send" type="submit" form="messageForm">Send</button>
+      </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="card mt-4" style="display: none;">
+      <div class="card-header">Admin Panel</div>
+      <div class="card-body">
+        <div class="active-users mb-4">
+          <strong>Active Users</strong>
+          <div id="usersList"></div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-danger" id="clearChat">Clear Chat</button>
+          <button class="btn btn-danger" id="removeUser">Remove User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keep all the existing HTML, but replace the script section with: -->
+<script>
+   function debug(message, data) {
+        console.log(`Debug - ${message}:`, data);
+    }
+
+  const API_URL = 'http://localhost:3000/api';
+  let currentUser = '';
+  let currentGroup = '';
+  let isAdmin = false;
+  let activeUsers = new Set();
+  let messagePollingInterval;
+
+  function createAvatar(username) {
+      return username.charAt(0);
+  }
+
+  function addMessage(message, sent, username = 'Unknown', messageId) {
+      const chatMessages = document.getElementById("chatMessages");
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("message", sent ? "sent" : "received");
+      if (messageId) messageDiv.dataset.messageId = messageId;
+      
+      const avatar = document.createElement("div");
+      avatar.classList.add("avatar");
+      avatar.textContent = createAvatar(sent ? currentUser : username);
+
+      const messageContent = document.createElement("div");
+      messageContent.classList.add("message-content");
+      
+      if (!sent) {
+          const usernameSpan = document.createElement("div");
+          usernameSpan.style.fontSize = "12px";
+          usernameSpan.style.marginBottom = "4px";
+          usernameSpan.style.color = "#a8a8a8";
+          usernameSpan.textContent = username;
+          messageContent.appendChild(usernameSpan);
+      }
+
+      const messageText = document.createElement("div");
+      messageText.textContent = message;
+      messageContent.appendChild(messageText);
+
+      if (sent) {
+          messageDiv.appendChild(messageContent);
+          messageDiv.appendChild(avatar);
+      } else {
+          messageDiv.appendChild(avatar);
+          messageDiv.appendChild(messageContent);
+      }
+
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addSystemMessage(message, messageId) {
+      const chatMessages = document.getElementById("chatMessages");
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("message", "system");
+      if (messageId) messageDiv.dataset.messageId = messageId;
+      
+      const messageContent = document.createElement("div");
+      messageContent.classList.add("message-content");
+      messageContent.textContent = message;
+      
+      messageDiv.appendChild(messageContent);
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function updateUsersList() {
+      const usersList = document.getElementById("usersList");
+      usersList.innerHTML = Array.from(activeUsers)
+          .map(user => `${user}${user === currentUser ? ' (You)' : ''}${user === currentUser && isAdmin ? ' - Admin' : ''}`)
+          .join('<br>');
+  }
+
+  function startMessagePolling() {
+      if (messagePollingInterval) {
+          clearInterval(messagePollingInterval);
+      }
+
+      async function fetchMessages() {
+          try {
+              const response = await fetch(`${API_URL}/messages/${currentGroup}`);
+              if (!response.ok) throw new Error('Failed to fetch messages');
+              const messages = await response.json();
+              updateMessages(messages);
+          } catch (error) {
+              console.error('Error fetching messages:', error);
+          }
+      }
+
+      fetchMessages();
+      messagePollingInterval = setInterval(fetchMessages, 1000);
+  }
+
+  function updateMessages(messages) {
+      const chatMessages = document.getElementById('chatMessages');
+      const existingMessageIds = new Set(
+          Array.from(chatMessages.children)
+              .map(div => div.dataset.messageId)
+      );
+
+      messages.forEach(msg => {
+          if (!existingMessageIds.has(msg.id?.toString())) {
+              if (msg.username === 'System') {
+                  addSystemMessage(msg.message, msg.id);
+              } else {
+                  addMessage(msg.message, msg.username === currentUser, msg.username, msg.id);
+              }
+          }
+      });
+  }
+
+  async function joinChat(groupName, username, createAsAdmin) {
+      try {
+          const endpoint = createAsAdmin ? 'groups/create' : 'groups/join';
+          const response = await fetch(`${API_URL}/${endpoint}`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  groupName,
+                  password: createAsAdmin ? 
+                      document.getElementById('groupPassword').value :
+                      document.getElementById('joinGroupPassword').value,
+                  username,
+                  isAdmin: createAsAdmin
+              })
+          });
+
+          const data = await response.json();
+          
+          if (!response.ok) {
+              throw new Error(data.message);
+          }
+
+          currentUser = username;
+          currentGroup = groupName;
+          isAdmin = createAsAdmin || data.isAdmin;
+
+          document.getElementById('loginSection').style.display = 'none';
+          document.getElementById('chatSection').style.display = 'block';
+          document.getElementById('adminPanel').style.display = isAdmin ? 'block' : 'none';
+          document.getElementById('activeGroup').textContent = `${groupName}${isAdmin ? ' (Admin)' : ''}`;
+
+          activeUsers = new Set(data.users || []);
+          updateUsersList();
+
+          addSystemMessage(`${username} has joined the group`);
+          startMessagePolling();
+
+      } catch (error) {
+          alert(error.message || 'Failed to join chat');
+          console.error('Error joining chat:', error);
+      }
+  }
+
+  document.getElementById("createGroupForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        
+        const groupName = document.getElementById("groupName").value;
+        const groupPassword = document.getElementById("groupPassword").value;
+        const username = document.getElementById("createUsername").value;
+        const isAdminChecked = document.getElementById("isAdmin").checked;
+
+        debug('Form submitted with data', {
+            groupName,
+            username,
+            isAdmin: isAdminChecked
+        });
+
+        if(groupName && groupPassword && username) {
+            try {
+                debug('Sending request to create group', {
+                    url: `${API_URL}/groups/create`,
+                    data: { groupName, username, isAdmin: isAdminChecked }
+                });
+
+                const response = await fetch(`${API_URL}/groups/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        groupName,
+                        password: groupPassword,
+                        username,
+                        isAdmin: isAdminChecked
+                    })
+                });
+
+                const data = await response.json();
+                debug('Server response', data);
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to create group');
+                }
+
+                currentUser = username;
+                currentGroup = groupName;
+                isAdmin = isAdminChecked;
+
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('chatSection').style.display = 'block';
+                document.getElementById('adminPanel').style.display = isAdmin ? 'block' : 'none';
+                document.getElementById('activeGroup').textContent = `${groupName}${isAdmin ? ' (Admin)' : ''}`;
+
+                activeUsers = new Set([username]);
+                updateUsersList();
+
+                addSystemMessage(`${username} has created the group`);
+                startMessagePolling();
+
+                document.getElementById("createGroupForm").reset();
+                
+                debug('Group created successfully', {
+                    currentUser,
+                    currentGroup,
+                    isAdmin,
+                    activeUsers: Array.from(activeUsers)
+                });
+            } catch (error) {
+                console.error('Error creating group:', error);
+                debug('Error occurred', { error: error.message });
+                alert(error.message || 'Failed to create group');
+            }
+        } else {
+            debug('Form validation failed', { groupName, username, isAdminChecked });
+            alert("Please fill in all fields.");
+        }
+    });
+
+    // Replace joinGroupForm event listener
+    document.getElementById("joinGroupForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        
+        const groupName = document.getElementById("joinGroupName").value;
+        const groupPassword = document.getElementById("joinGroupPassword").value;
+        const username = document.getElementById("joinUsername").value;
+
+        debug('Join form submitted with data', {
+            groupName,
+            username
+        });
+
+        if(groupName && groupPassword && username) {
+            try {
+                debug('Sending request to join group', {
+                    url: `${API_URL}/groups/join`,
+                    data: { groupName, username }
+                });
+
+                const response = await fetch(`${API_URL}/groups/join`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        groupName,
+                        password: groupPassword,
+                        username
+                    })
+                });
+
+                const data = await response.json();
+                debug('Server response', data);
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to join group');
+                }
+
+                currentUser = username;
+                currentGroup = groupName;
+                isAdmin = data.isAdmin;
+
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('chatSection').style.display = 'block';
+                document.getElementById('adminPanel').style.display = isAdmin ? 'block' : 'none';
+                document.getElementById('activeGroup').textContent = `${groupName}${isAdmin ? ' (Admin)' : ''}`;
+
+                activeUsers = new Set(data.users || []);
+                updateUsersList();
+
+                addSystemMessage(`${username} has joined the group`);
+                startMessagePolling();
+
+                document.getElementById("joinGroupForm").reset();
+                
+                debug('Joined group successfully', {
+                    currentUser,
+                    currentGroup,
+                    isAdmin,
+                    activeUsers: Array.from(activeUsers)
+                });
+            } catch (error) {
+                console.error('Error joining group:', error);
+                debug('Error occurred', { error: error.message });
+                alert(error.message || 'Failed to join group');
+            }
+        } else {
+            debug('Form validation failed', { groupName, username });
+            alert("Please fill in all fields.");
+        }
+    });
+
+  document.getElementById("messageInput").addEventListener("keypress", async function(event) {
+      if (event.key === "Enter") {
+          event.preventDefault();
+          const messageInput = document.getElementById("messageInput");
+          const message = messageInput.value.trim();
+
+          if (message) {
+              try {
+                  const response = await fetch(`${API_URL}/messages/send`, {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                          groupName: currentGroup,
+                          username: currentUser,
+                          message: message
+                      })
+                  });
+
+                  if (!response.ok) {
+                      throw new Error('Failed to send message');
+                  }
+
+                  messageInput.value = '';
+              } catch (error) {
+                  console.error('Error sending message:', error);
+                  alert('Failed to send message');
+              }
+          }
+      }
+  });
+
+  document.getElementById("leaveGroup").addEventListener("click", async function() {
+      try {
+          await fetch(`${API_URL}/groups/leave`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  groupName: currentGroup,
+                  username: currentUser
+              })
+          });
+
+          if (messagePollingInterval) {
+              clearInterval(messagePollingInterval);
+          }
+
+          document.getElementById("loginSection").style.display = "block";
+          document.getElementById("chatSection").style.display = "none";
+          document.getElementById("adminPanel").style.display = "none";
+          document.getElementById("chatMessages").innerHTML = '';
+          currentUser = '';
+          currentGroup = '';
+          isAdmin = false;
+          activeUsers.clear();
+
+      } catch (error) {
+          console.error('Error leaving group:', error);
+          alert('Failed to leave group');
+      }
+  });
+
+  document.getElementById("clearChat").addEventListener("click", async function() {
+      if (isAdmin) {
+          try {
+              const response = await fetch(`${API_URL}/admin/clear-chat`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      groupName: currentGroup,
+                      username: currentUser
+                  })
+              });
+
+              if (!response.ok) {
+                  throw new Error('Failed to clear chat');
+              }
+
+              document.getElementById("chatMessages").innerHTML = '';
+              addSystemMessage("Chat has been cleared by admin");
+          } catch (error) {
+              console.error('Error clearing chat:', error);
+              alert('Failed to clear chat');
+          }
+      }
+  });
+
+  document.getElementById("removeUser").addEventListener("click", async function() {
+      if (isAdmin) {
+          const username = prompt("Enter username to remove:");
+          if (username && username !== currentUser && activeUsers.has(username)) {
+              try {
+                  const response = await fetch(`${API_URL}/admin/remove-user`, {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                          groupName: currentGroup,
+                          adminUsername: currentUser,
+                          userToRemove: username
+                      })
+                  });
+
+                  if (!response.ok) {
+                      throw new Error('Failed to remove user');
+                  }
+
+                  const data = await response.json();
+                  activeUsers = new Set(data.users);
+                  updateUsersList();
+              } catch (error) {
+                  console.error('Error removing user:', error);
+                  alert('Failed to remove user');
+              }
+          }
+      }
+  });
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

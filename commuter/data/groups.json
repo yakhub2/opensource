@@ -1,0 +1,29 @@
+{
+  "pasha": {
+    "name": "pasha",
+    "password": "1258",
+    "admin": "pasha",
+    "users": [
+      "pasha"
+    ],
+    "createdAt": "2024-11-24T18:33:40.882Z"
+  },
+  "plk": {
+    "name": "plk",
+    "password": "1258",
+    "admin": "yakhub",
+    "users": [
+      "yakhub"
+    ],
+    "createdAt": "2024-11-24T18:48:05.910Z"
+  },
+  "lpk": {
+    "name": "lpk",
+    "password": "1258",
+    "admin": "pasha",
+    "users": [
+      "pasha"
+    ],
+    "createdAt": "2024-11-25T04:45:10.453Z"
+  }
+}

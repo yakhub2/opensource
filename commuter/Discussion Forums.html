@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friendly Chat Forum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <style>
+    :root {
+      --primary-bg: #fafafa;
+      --message-sent: #d1e7fd;
+      --message-received: #f1f0f0;
+      --text-primary: #333;
+      --text-secondary: #555;
+    }
+
+    body {
+      background-color: var(--primary-bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-primary);
+    }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 30px auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+    }
+
+    .chat-header {
+      padding: 10px 20px;
+      background-color: #f7f7f7;
+      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .chat-messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 10px;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .message.sent {
+      justify-content: flex-end;
+    }
+
+    .message .message-content {
+      max-width: 75%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.sent .message-content {
+      background-color: var(--message-sent);
+      color: var(--text-primary);
+    }
+
+    .message.received .message-content {
+      background-color: var(--message-received);
+      color: var(--text-primary);
+    }
+
+    .message .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: #bbb;
+      font-size: 14px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .message.sent .avatar {
+      margin-left: 10px;
+      margin-right: 0;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .chat-input input:focus {
+      outline: none;
+      border-color: #999;
+    }
+
+    .chat-input button {
+      background: none;
+      border: none;
+      color: #007bff;
+      font-size: 18px;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+
+    .chat-input button:disabled {
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">Global Chat Room</div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+      <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById("chatMessages");
+    const messageInput = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+
+    // Sample Usernames
+    const usernames = ["Alice", "Bob", "Charlie", "Dave"];
+    const currentUser = usernames[Math.floor(Math.random() * usernames.length)];
+
+    function createAvatar(username) {
+      return username.charAt(0).toUpperCase();
+    }
+
+    function addMessage(message, sent = true) {
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("message", sent ? "sent" : "received");
+
+      const avatarDiv = document.createElement("div");
+      avatarDiv.classList.add("avatar");
+      avatarDiv.textContent = sent ? createAvatar(currentUser) : createAvatar("Other");
+
+      const messageContentDiv = document.createElement("div");
+      messageContentDiv.classList.add("message-content");
+      messageContentDiv.textContent = message;
+
+      if (sent) {
+        messageDiv.appendChild(messageContentDiv);
+        messageDiv.appendChild(avatarDiv);
+      } else {
+        messageDiv.appendChild(avatarDiv);
+        messageDiv.appendChild(messageContentDiv);
+      }
+
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    sendButton.addEventListener("click", () => {
+      const message = messageInput.value.trim();
+      if (message) {
+        addMessage(message, true);
+        messageInput.value = "";
+
+        // Simulate a response from other users
+        setTimeout(() => {
+          addMessage(`Response to: ${message}`, false);
+        }, Math.random() * 2000 + 500);
+      }
+    });
+
+    messageInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        sendButton.click();
+      }
+    });
+  </script>
+</body>
+</html>

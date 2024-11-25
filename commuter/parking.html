@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Availability</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+    }
+
+    .parking-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .parking-card h5 {
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .status-available {
+      color: green;
+      font-weight: bold;
+    }
+
+    .status-full {
+      color: red;
+      font-weight: bold;
+    }
+
+    .map-link {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .map-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="text-center mb-4">Parking Availability</h2>
+
+    <div id="parkingList">
+      <!-- Parking areas will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <script>
+    // Mock data for parking areas
+    const parkingAreas = [
+      {
+        id: 1,
+        name: "Parking Lot A",
+        location: "Near Main Gate",
+        status: "Available", // Possible values: 'Available', 'Full'
+        mapLink: "https://maps.google.com/?q=Parking+Lot+A"
+      },
+      {
+        id: 2,
+        name: "Parking Lot B",
+        location: "Next to Building C",
+        status: "Full",
+        mapLink: "https://maps.google.com/?q=Parking+Lot+B"
+      },
+      {
+        id: 3,
+        name: "Parking Lot C",
+        location: "Behind Library",
+        status: "Available",
+        mapLink: "https://maps.google.com/?q=Parking+Lot+C"
+      }
+    ];
+
+    // Render parking areas
+    const renderParkingAreas = () => {
+      const container = document.getElementById("parkingList");
+      parkingAreas.forEach((area) => {
+        const card = document.createElement("div");
+        card.className = "parking-card";
+
+        card.innerHTML = `
+          <h5>${area.name}</h5>
+          <p>Location: ${area.location}</p>
+          <p>Status: <span class="${
+            area.status === "Available" ? "status-available" : "status-full"
+          }">${area.status}</span></p>
+          <a href="${area.mapLink}" class="map-link" target="_blank">View on Map</a>
+        `;
+        container.appendChild(card);
+      });
+    };
+
+    // Initialize the page by rendering parking areas
+    renderParkingAreas();
+  </script>
+
+</body>
+</html>
